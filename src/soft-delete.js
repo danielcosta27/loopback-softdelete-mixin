@@ -1,4 +1,4 @@
-import _debug from './debug';
+import _debug from 'debug';
 const debug = _debug();
 
 export default (Model, { deletedAt = 'deletedAt', _isDeleted = '_isDeleted', scrub = false, required = false }) => {
