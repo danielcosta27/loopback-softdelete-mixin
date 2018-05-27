@@ -1,10 +1,10 @@
 import _debug from './debug';
 const debug = _debug();
 
-export default (Model, { deletedAt = 'deletedAt', _isDeleted = '_isDeleted', scrub = false }) => {
+export default (Model, { deletedAt = 'deletedAt', _isDeleted = '_isDeleted', scrub = false, required = false }) => {
   debug('SoftDelete mixin for Model %s', Model.modelName);
 
-  debug('options', { deletedAt, _isDeleted, scrub });
+  debug('options', { deletedAt, _isDeleted, scrub, required });
 
   const properties = Model.definition.properties;
 
@@ -19,7 +19,7 @@ export default (Model, { deletedAt = 'deletedAt', _isDeleted = '_isDeleted', scr
   }
 
   Model.defineProperty(deletedAt, {type: Date, required: false});
-  Model.defineProperty(_isDeleted, {type: Boolean, required: true, default: false});
+  Model.defineProperty(_isDeleted, {type: Boolean, required: required, default: false});
 
   Model.destroyAll = function softDestroyAll(where, cb) {
     return Model.updateAll(where, { ...scrubbed, [deletedAt]: new Date(), [_isDeleted]: true })
